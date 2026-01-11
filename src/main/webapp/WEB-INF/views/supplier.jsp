@@ -6,7 +6,7 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
-            <title>Data Obat</title>
+            <title>Data Supplier</title>
             <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/bootstrap.min.css">
             <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/all.min.css">
             <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/aos.css">
@@ -29,9 +29,9 @@
                     <hr class="border-secondary my-3">
                     <a href="${pageContext.request.contextPath}/dashboard" class="nav-link"><i
                             class="fa-solid fa-gauge"></i> Dashboard</a>
-                    <a href="${pageContext.request.contextPath}/obat" class="nav-link active"><i
+                    <a href="${pageContext.request.contextPath}/obat" class="nav-link"><i
                             class="fa-solid fa-capsules"></i> Data Obat</a>
-                    <a href="${pageContext.request.contextPath}/supplier" class="nav-link"><i
+                    <a href="${pageContext.request.contextPath}/supplier" class="nav-link active"><i
                             class="fa-solid fa-truck-field"></i> Data Supplier</a>
                     <a href="${pageContext.request.contextPath}/transaksi-masuk" class="nav-link"><i
                             class="fa-solid fa-circle-down"></i> Obat Masuk</a>
@@ -48,82 +48,58 @@
                 <div class="flex-grow-1 p-4 content-area">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <div>
-                            <h3 class="text-white mb-0">Data Obat</h3>
-                            <small class="text-white-50">Kelola data obat</small>
+                            <h3 class="text-white mb-0">Data Supplier</h3>
+                            <small class="text-white-50">Kelola data supplier/vendor obat</small>
                         </div>
-                        <a href="${pageContext.request.contextPath}/obat" class="btn btn-outline-light btn-sm">Reset
+                        <a href="${pageContext.request.contextPath}/supplier" class="btn btn-outline-light btn-sm">Reset
                             Form</a>
                     </div>
 
                     <div class="row g-3">
                         <div class="col-lg-4" data-aos="fade-up">
                             <div class="glass-card card">
-                                <div class="card-header bg-transparent text-white fw-semibold">${editObat == null ?
-                                    "Tambah Obat" : "Ubah Obat"}</div>
+                                <div class="card-header bg-transparent text-white fw-semibold">${editSupplier == null ?
+                                    "Tambah Supplier" : "Ubah Supplier"}</div>
                                 <div class="card-body">
-                                    <form method="post" action="${pageContext.request.contextPath}/obat">
-                                        <input type="hidden" name="action" value="${editObat == null ? " create"
-                                            : "update" }">
-                                        <c:if test="${editObat != null}">
-                                            <input type="hidden" name="id" value="${editObat.id}">
+                                    <form method="post" action="${pageContext.request.contextPath}/supplier">
+                                        <input type="hidden" name="action"
+                                            value="${editSupplier == null ? 'create' : 'update'}">
+                                        <c:if test="${editSupplier != null}">
+                                            <input type="hidden" name="id" value="${editSupplier.id}">
                                         </c:if>
                                         <div class="mb-2">
-                                            <label class="form-label">Kode</label>
-                                            <input type="text" name="kodeObat" class="form-control"
-                                                value="${editObat.kodeObat}" required>
+                                            <label class="form-label">Kode Supplier</label>
+                                            <input type="text" name="kodeSupplier" class="form-control"
+                                                value="${editSupplier.kodeSupplier}" required placeholder="SUP001">
                                         </div>
                                         <div class="mb-2">
-                                            <label class="form-label">Nama</label>
-                                            <input type="text" name="namaObat" class="form-control"
-                                                value="${editObat.namaObat}" required>
+                                            <label class="form-label">Nama Supplier</label>
+                                            <input type="text" name="namaSupplier" class="form-control"
+                                                value="${editSupplier.namaSupplier}" required
+                                                placeholder="PT Contoh Farma">
                                         </div>
                                         <div class="mb-2">
-                                            <label class="form-label">Kategori</label>
-                                            <input type="text" name="kategori" class="form-control"
-                                                value="${editObat.kategori}">
+                                            <label class="form-label">Alamat</label>
+                                            <textarea name="alamat" class="form-control" rows="2"
+                                                placeholder="Alamat lengkap">${editSupplier.alamat}</textarea>
                                         </div>
                                         <div class="mb-2">
-                                            <label class="form-label">Satuan</label>
-                                            <input type="text" name="satuan" class="form-control"
-                                                value="${editObat.satuan}" required>
+                                            <label class="form-label">Telepon</label>
+                                            <input type="text" name="telepon" class="form-control"
+                                                value="${editSupplier.telepon}" placeholder="021-12345678">
                                         </div>
                                         <div class="mb-2">
-                                            <label class="form-label">Harga Beli</label>
-                                            <input type="number" step="0.01" name="hargaBeli" class="form-control"
-                                                value="${editObat.hargaBeli}">
+                                            <label class="form-label">Email</label>
+                                            <input type="email" name="email" class="form-control"
+                                                value="${editSupplier.email}" placeholder="email@supplier.com">
                                         </div>
                                         <div class="mb-2">
-                                            <label class="form-label">Stok Saat Ini</label>
-                                            <input type="number" name="stokSaatIni" class="form-control"
-                                                value="${editObat.stokSaatIni}" required>
+                                            <label class="form-label">Kontak Person</label>
+                                            <input type="text" name="kontakPerson" class="form-control"
+                                                value="${editSupplier.kontakPerson}" placeholder="Nama kontak">
                                         </div>
-                                        <div class="mb-2">
-                                            <label class="form-label">Stok Minimum</label>
-                                            <input type="number" name="stokMinimum" class="form-control"
-                                                value="${editObat.stokMinimum}" required>
-                                        </div>
-                                        <div class="mb-2">
-                                            <label class="form-label">Kadaluarsa</label>
-                                            <input type="date" name="tanggalKadaluarsa" class="form-control"
-                                                value="${editObat.tanggalKadaluarsa}">
-                                        </div>
-                                        <div class="mb-2">
-                                            <label class="form-label">Lokasi</label>
-                                            <input type="text" name="lokasiPenyimpanan" class="form-control"
-                                                value="${editObat.lokasiPenyimpanan}">
-                                        </div>
-                                        <div class="mb-2">
-                                            <label class="form-label">Produsen</label>
-                                            <input type="text" name="produsen" class="form-control"
-                                                value="${editObat.produsen}">
-                                        </div>
-                                        <div class="mb-2">
-                                            <label class="form-label">Deskripsi</label>
-                                            <textarea name="deskripsi" class="form-control"
-                                                rows="2">${editObat.deskripsi}</textarea>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary w-100 mt-2">${editObat == null ?
-                                            "Simpan" : "Update"}</button>
+                                        <button type="submit" class="btn btn-primary w-100 mt-2">${editSupplier == null
+                                            ? "Simpan" : "Update"}</button>
                                     </form>
                                 </div>
                             </div>
@@ -131,7 +107,7 @@
 
                         <div class="col-lg-8" data-aos="fade-up" data-aos-delay="100">
                             <div class="glass-card card">
-                                <div class="card-header bg-transparent text-white fw-semibold">Daftar Obat</div>
+                                <div class="card-header bg-transparent text-white fw-semibold">Daftar Supplier</div>
                                 <div class="card-body p-0">
                                     <div class="table-responsive">
                                         <table class="table table-dark table-hover mb-0 align-middle">
@@ -139,40 +115,40 @@
                                                 <tr>
                                                     <th>Kode</th>
                                                     <th>Nama</th>
-                                                    <th>Stok</th>
-                                                    <th>Min</th>
-                                                    <th>Satuan</th>
+                                                    <th>Telepon</th>
+                                                    <th>Email</th>
+                                                    <th>Kontak</th>
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <c:forEach items="${obatList}" var="o">
+                                                <c:forEach items="${supplierList}" var="s">
                                                     <tr>
-                                                        <td>${o.kodeObat}</td>
-                                                        <td>${o.namaObat}</td>
-                                                        <td>${o.stokSaatIni}</td>
-                                                        <td>${o.stokMinimum}</td>
-                                                        <td>${o.satuan}</td>
+                                                        <td><span class="badge bg-info">${s.kodeSupplier}</span></td>
+                                                        <td>${s.namaSupplier}</td>
+                                                        <td>${s.telepon}</td>
+                                                        <td>${s.email}</td>
+                                                        <td>${s.kontakPerson}</td>
                                                         <td>
-                                                            <a href="${pageContext.request.contextPath}/obat?id=${o.id}"
+                                                            <a href="${pageContext.request.contextPath}/supplier?id=${s.id}"
                                                                 class="btn btn-sm btn-outline-info"><i
                                                                     class="fa-regular fa-pen-to-square"></i></a>
                                                             <form method="post"
-                                                                action="${pageContext.request.contextPath}/obat"
+                                                                action="${pageContext.request.contextPath}/supplier"
                                                                 class="d-inline"
                                                                 onsubmit="return confirm('Hapus data?');">
                                                                 <input type="hidden" name="action" value="delete">
-                                                                <input type="hidden" name="id" value="${o.id}">
+                                                                <input type="hidden" name="id" value="${s.id}">
                                                                 <button class="btn btn-sm btn-outline-danger"><i
                                                                         class="fa-regular fa-trash-can"></i></button>
                                                             </form>
                                                         </td>
                                                     </tr>
                                                 </c:forEach>
-                                                <c:if test="${empty obatList}">
+                                                <c:if test="${empty supplierList}">
                                                     <tr>
-                                                        <td colspan="6" class="text-center text-white-50 py-3">Belum ada
-                                                            data</td>
+                                                        <td colspan="6" class="text-center text-white-50 py-4">Belum ada
+                                                            data supplier</td>
                                                     </tr>
                                                 </c:if>
                                             </tbody>
