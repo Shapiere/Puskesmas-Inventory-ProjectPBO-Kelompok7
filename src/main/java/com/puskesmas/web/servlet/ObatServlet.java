@@ -3,6 +3,7 @@ package com.puskesmas.web.servlet;
 import com.puskesmas.web.dao.ObatDao;
 import com.puskesmas.web.model.Obat;
 import com.puskesmas.web.model.User;
+import com.puskesmas.web.util.RolePermission;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,7 +17,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
-@WebServlet(name = "ObatServlet", urlPatterns = {"/obat"})
+@WebServlet(name = "ObatServlet", urlPatterns = { "/obat" })
 public class ObatServlet extends HttpServlet {
 
     private final ObatDao obatDao = new ObatDao();
@@ -40,6 +41,15 @@ public class ObatServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // Check permission for managing obat
+        User user = getCurrentUser(req);
+        if (user == null || !RolePermission.hasPermission(user.getRole(), RolePermission.MANAGE_OBAT)) {
+            HttpSession session = req.getSession();
+            session.setAttribute("errorMessage", "Anda tidak memiliki izin untuk mengubah data obat.");
+            resp.sendRedirect(req.getContextPath() + "/obat");
+            return;
+        }
+
         String action = req.getParameter("action");
         if (action == null) {
             resp.sendRedirect(req.getContextPath() + "/obat");
@@ -93,17 +103,33 @@ public class ObatServlet extends HttpServlet {
     }
 
     private BigDecimal parseBigDecimal(String value) {
-        try { return new BigDecimal(value); } catch (Exception e) { return BigDecimal.ZERO; }
+        try {
+            return new BigDecimal(value);
+        } catch (Exception e) {
+            return BigDecimal.ZERO;
+        }
     }
 
     private int parseInt(String value, int defaultVal) {
-        try { return Integer.parseInt(value); } catch (Exception e) { return defaultVal; }
+        try {
+            return Integer.parseInt(value);
+        } catch (Exception e) {
+            return defaultVal;
+        }
     }
 
     private Integer currentUserId(HttpServletRequest req) {
         HttpSession session = req.getSession(false);
-        if (session == null) return null;
+        if (session == null)
+            return null;
         User user = (User) session.getAttribute("user");
         return user != null ? user.getId() : null;
+    }
+
+    private User getCurrentUser(HttpServletRequest req) {
+        HttpSession session = req.getSession(false);
+        if (session == null)
+            return null;
+        return (User) session.getAttribute("user");
     }
 }

@@ -5,6 +5,7 @@ import com.puskesmas.web.dao.ObatKeluarDao;
 import com.puskesmas.web.model.Obat;
 import com.puskesmas.web.model.ObatKeluar;
 import com.puskesmas.web.model.User;
+import com.puskesmas.web.util.RolePermission;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -17,7 +18,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
-@WebServlet(name = "ObatKeluarServlet", urlPatterns = {"/transaksi-keluar"})
+@WebServlet(name = "ObatKeluarServlet", urlPatterns = { "/transaksi-keluar" })
 public class ObatKeluarServlet extends HttpServlet {
 
     private final ObatKeluarDao obatKeluarDao = new ObatKeluarDao();
@@ -38,6 +39,15 @@ public class ObatKeluarServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // Check permission for managing obat keluar - All roles can do this
+        User user = getCurrentUser(req);
+        if (user == null || !RolePermission.hasPermission(user.getRole(), RolePermission.MANAGE_OBAT_KELUAR)) {
+            HttpSession session = req.getSession();
+            session.setAttribute("errorMessage", "Anda tidak memiliki izin untuk menambah data obat keluar.");
+            resp.sendRedirect(req.getContextPath() + "/home");
+            return;
+        }
+
         try {
             ObatKeluar data = new ObatKeluar();
             data.setIdObat(Integer.parseInt(req.getParameter("idObat")));
@@ -55,8 +65,16 @@ public class ObatKeluarServlet extends HttpServlet {
 
     private Integer currentUserId(HttpServletRequest req) {
         HttpSession session = req.getSession(false);
-        if (session == null) return null;
+        if (session == null)
+            return null;
         User user = (User) session.getAttribute("user");
         return user != null ? user.getId() : null;
+    }
+
+    private User getCurrentUser(HttpServletRequest req) {
+        HttpSession session = req.getSession(false);
+        if (session == null)
+            return null;
+        return (User) session.getAttribute("user");
     }
 }

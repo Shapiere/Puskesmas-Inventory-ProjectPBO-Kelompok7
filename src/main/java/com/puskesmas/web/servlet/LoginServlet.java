@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 
-@WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
+@WebServlet(name = "LoginServlet", urlPatterns = { "/login" })
 public class LoginServlet extends HttpServlet {
 
     private final UserDao userDao = new UserDao();
@@ -33,7 +33,7 @@ public class LoginServlet extends HttpServlet {
             if (user != null && PasswordUtil.matches(password, user.getPassword())) {
                 HttpSession session = req.getSession(true);
                 session.setAttribute("user", user);
-                resp.sendRedirect(req.getContextPath() + "/dashboard");
+                resp.sendRedirect(req.getContextPath() + "/home");
                 return;
             }
         } catch (SQLException e) {

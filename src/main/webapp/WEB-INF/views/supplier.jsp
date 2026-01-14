@@ -15,97 +15,82 @@
 
         <body class="gradient-bg">
             <div class="d-flex min-vh-100">
-                <div class="sidebar shadow-lg" data-aos="fade-right">
-                    <div class="sidebar-brand mb-3"
-                        style="font-family: 'Roboto Slab', serif; font-size: 22px; letter-spacing: 0.5px; white-space: nowrap;">
-                        <i class="fa-solid fa-pills me-2"></i>Manajemen Obat
-                    </div>
-                    <a href="${pageContext.request.contextPath}/home" class="nav-link"><i class="fa-solid fa-house"></i>
-                        Home</a>
-                    <a href="${pageContext.request.contextPath}/about" class="nav-link"><i
-                            class="fa-solid fa-circle-info"></i> About Us</a>
-                    <a href="${pageContext.request.contextPath}/gallery" class="nav-link"><i
-                            class="fa-solid fa-images"></i> Gallery</a>
-                    <hr class="border-secondary my-3">
-                    <a href="${pageContext.request.contextPath}/dashboard" class="nav-link"><i
-                            class="fa-solid fa-gauge"></i> Dashboard</a>
-                    <a href="${pageContext.request.contextPath}/obat" class="nav-link"><i
-                            class="fa-solid fa-capsules"></i> Data Obat</a>
-                    <a href="${pageContext.request.contextPath}/supplier" class="nav-link active"><i
-                            class="fa-solid fa-truck-field"></i> Data Supplier</a>
-                    <a href="${pageContext.request.contextPath}/transaksi-masuk" class="nav-link"><i
-                            class="fa-solid fa-circle-down"></i> Obat Masuk</a>
-                    <a href="${pageContext.request.contextPath}/transaksi-keluar" class="nav-link"><i
-                            class="fa-solid fa-circle-up"></i> Obat Keluar</a>
-                    <a href="${pageContext.request.contextPath}/laporan" class="nav-link"><i
-                            class="fa-solid fa-chart-line"></i> Laporan</a>
-                    <div class="mt-auto pt-4">
-                        <a href="${pageContext.request.contextPath}/logout" class="nav-link text-danger"><i
-                                class="fa-solid fa-right-from-bracket"></i> Keluar</a>
-                    </div>
-                </div>
+                <jsp:include page="/WEB-INF/includes/sidebar.jsp">
+                    <jsp:param name="activePage" value="supplier" />
+                </jsp:include>
 
                 <div class="flex-grow-1 p-4 content-area">
+                    <!-- Messages -->
+                    <jsp:include page="/WEB-INF/includes/messages.jsp" />
+
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <div>
                             <h3 class="text-white mb-0">Data Supplier</h3>
                             <small class="text-white-50">Kelola data supplier/vendor obat</small>
                         </div>
-                        <a href="${pageContext.request.contextPath}/supplier" class="btn btn-outline-light btn-sm">Reset
-                            Form</a>
+                        <c:if test="${canManageSupplier}">
+                            <a href="${pageContext.request.contextPath}/supplier"
+                                class="btn btn-outline-light btn-sm">Reset Form</a>
+                        </c:if>
                     </div>
 
                     <div class="row g-3">
-                        <div class="col-lg-4" data-aos="fade-up">
-                            <div class="glass-card card">
-                                <div class="card-header bg-transparent text-white fw-semibold">${editSupplier == null ?
-                                    "Tambah Supplier" : "Ubah Supplier"}</div>
-                                <div class="card-body">
-                                    <form method="post" action="${pageContext.request.contextPath}/supplier">
-                                        <input type="hidden" name="action"
-                                            value="${editSupplier == null ? 'create' : 'update'}">
-                                        <c:if test="${editSupplier != null}">
-                                            <input type="hidden" name="id" value="${editSupplier.id}">
-                                        </c:if>
-                                        <div class="mb-2">
-                                            <label class="form-label">Kode Supplier</label>
-                                            <input type="text" name="kodeSupplier" class="form-control"
-                                                value="${editSupplier.kodeSupplier}" required placeholder="SUP001">
-                                        </div>
-                                        <div class="mb-2">
-                                            <label class="form-label">Nama Supplier</label>
-                                            <input type="text" name="namaSupplier" class="form-control"
-                                                value="${editSupplier.namaSupplier}" required
-                                                placeholder="PT Contoh Farma">
-                                        </div>
-                                        <div class="mb-2">
-                                            <label class="form-label">Alamat</label>
-                                            <textarea name="alamat" class="form-control" rows="2"
-                                                placeholder="Alamat lengkap">${editSupplier.alamat}</textarea>
-                                        </div>
-                                        <div class="mb-2">
-                                            <label class="form-label">Telepon</label>
-                                            <input type="text" name="telepon" class="form-control"
-                                                value="${editSupplier.telepon}" placeholder="021-12345678">
-                                        </div>
-                                        <div class="mb-2">
-                                            <label class="form-label">Email</label>
-                                            <input type="email" name="email" class="form-control"
-                                                value="${editSupplier.email}" placeholder="email@supplier.com">
-                                        </div>
-                                        <div class="mb-2">
-                                            <label class="form-label">Kontak Person</label>
-                                            <input type="text" name="kontakPerson" class="form-control"
-                                                value="${editSupplier.kontakPerson}" placeholder="Nama kontak">
-                                        </div>
-                                        <button type="submit" class="btn btn-primary w-100 mt-2">${editSupplier == null
-                                            ? "Simpan" : "Update"}</button>
-                                    </form>
+                        <!-- Form Section - Only visible for Admin -->
+                        <c:if test="${canManageSupplier}">
+                            <div class="col-lg-4" data-aos="fade-up">
+                                <div class="glass-card card">
+                                    <div class="card-header bg-transparent text-white fw-semibold">
+                                        ${editSupplier == null ? "Tambah Supplier" : "Ubah Supplier"}
+                                    </div>
+                                    <div class="card-body">
+                                        <form method="post" action="${pageContext.request.contextPath}/supplier">
+                                            <input type="hidden" name="action"
+                                                value="${editSupplier == null ? 'create' : 'update'}">
+                                            <c:if test="${editSupplier != null}">
+                                                <input type="hidden" name="id" value="${editSupplier.id}">
+                                            </c:if>
+                                            <div class="mb-2">
+                                                <label class="form-label">Kode Supplier</label>
+                                                <input type="text" name="kodeSupplier" class="form-control"
+                                                    value="${editSupplier.kodeSupplier}" required placeholder="SUP001">
+                                            </div>
+                                            <div class="mb-2">
+                                                <label class="form-label">Nama Supplier</label>
+                                                <input type="text" name="namaSupplier" class="form-control"
+                                                    value="${editSupplier.namaSupplier}" required
+                                                    placeholder="PT Contoh Farma">
+                                            </div>
+                                            <div class="mb-2">
+                                                <label class="form-label">Alamat</label>
+                                                <textarea name="alamat" class="form-control" rows="2"
+                                                    placeholder="Alamat lengkap">${editSupplier.alamat}</textarea>
+                                            </div>
+                                            <div class="mb-2">
+                                                <label class="form-label">Telepon</label>
+                                                <input type="text" name="telepon" class="form-control"
+                                                    value="${editSupplier.telepon}" placeholder="021-12345678">
+                                            </div>
+                                            <div class="mb-2">
+                                                <label class="form-label">Email</label>
+                                                <input type="email" name="email" class="form-control"
+                                                    value="${editSupplier.email}" placeholder="email@supplier.com">
+                                            </div>
+                                            <div class="mb-2">
+                                                <label class="form-label">Kontak Person</label>
+                                                <input type="text" name="kontakPerson" class="form-control"
+                                                    value="${editSupplier.kontakPerson}" placeholder="Nama kontak">
+                                            </div>
+                                            <button type="submit" class="btn btn-primary w-100 mt-2">
+                                                ${editSupplier == null ? "Simpan" : "Update"}
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </c:if>
 
-                        <div class="col-lg-8" data-aos="fade-up" data-aos-delay="100">
+                        <div class="${canManageSupplier ? 'col-lg-8' : 'col-12'}" data-aos="fade-up"
+                            data-aos-delay="100">
                             <div class="glass-card card">
                                 <div class="card-header bg-transparent text-white fw-semibold">Daftar Supplier</div>
                                 <div class="card-body p-0">
@@ -118,7 +103,9 @@
                                                     <th>Telepon</th>
                                                     <th>Email</th>
                                                     <th>Kontak</th>
-                                                    <th>Aksi</th>
+                                                    <c:if test="${canManageSupplier}">
+                                                        <th>Aksi</th>
+                                                    </c:if>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -129,26 +116,32 @@
                                                         <td>${s.telepon}</td>
                                                         <td>${s.email}</td>
                                                         <td>${s.kontakPerson}</td>
-                                                        <td>
-                                                            <a href="${pageContext.request.contextPath}/supplier?id=${s.id}"
-                                                                class="btn btn-sm btn-outline-info"><i
-                                                                    class="fa-regular fa-pen-to-square"></i></a>
-                                                            <form method="post"
-                                                                action="${pageContext.request.contextPath}/supplier"
-                                                                class="d-inline"
-                                                                onsubmit="return confirm('Hapus data?');">
-                                                                <input type="hidden" name="action" value="delete">
-                                                                <input type="hidden" name="id" value="${s.id}">
-                                                                <button class="btn btn-sm btn-outline-danger"><i
-                                                                        class="fa-regular fa-trash-can"></i></button>
-                                                            </form>
-                                                        </td>
+                                                        <c:if test="${canManageSupplier}">
+                                                            <td>
+                                                                <a href="${pageContext.request.contextPath}/supplier?id=${s.id}"
+                                                                    class="btn btn-sm btn-outline-info">
+                                                                    <i class="fa-regular fa-pen-to-square"></i>
+                                                                </a>
+                                                                <form method="post"
+                                                                    action="${pageContext.request.contextPath}/supplier"
+                                                                    class="d-inline"
+                                                                    onsubmit="return confirm('Hapus data?');">
+                                                                    <input type="hidden" name="action" value="delete">
+                                                                    <input type="hidden" name="id" value="${s.id}">
+                                                                    <button class="btn btn-sm btn-outline-danger">
+                                                                        <i class="fa-regular fa-trash-can"></i>
+                                                                    </button>
+                                                                </form>
+                                                            </td>
+                                                        </c:if>
                                                     </tr>
                                                 </c:forEach>
                                                 <c:if test="${empty supplierList}">
                                                     <tr>
-                                                        <td colspan="6" class="text-center text-white-50 py-4">Belum ada
-                                                            data supplier</td>
+                                                        <td colspan="${canManageSupplier ? '6' : '5'}"
+                                                            class="text-center text-white-50 py-4">
+                                                            Belum ada data supplier
+                                                        </td>
                                                     </tr>
                                                 </c:if>
                                             </tbody>

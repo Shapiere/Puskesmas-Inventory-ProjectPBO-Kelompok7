@@ -15,35 +15,14 @@
 
         <body class="gradient-bg">
             <div class="d-flex min-vh-100">
-                <div class="sidebar shadow-lg" data-aos="fade-right">
-                    <div class="sidebar-brand mb-3"
-                        style="font-family: 'Roboto Slab', serif; font-size: 22px; letter-spacing: 0.5px; white-space: nowrap;">
-                        <i class="fa-solid fa-pills me-2"></i>Manajemen Obat
-                    </div>
-                    <a href="${pageContext.request.contextPath}/home" class="nav-link"><i class="fa-solid fa-house"></i>
-                        Home</a>
-                    <a href="${pageContext.request.contextPath}/about" class="nav-link"><i
-                            class="fa-solid fa-circle-info"></i> About Us</a>
-                    <a href="${pageContext.request.contextPath}/gallery" class="nav-link"><i
-                            class="fa-solid fa-images"></i> Gallery</a>
-                    <hr class="border-secondary my-3">
-                    <a href="${pageContext.request.contextPath}/dashboard" class="nav-link"><i
-                            class="fa-solid fa-gauge"></i> Dashboard</a>
-                    <a href="${pageContext.request.contextPath}/obat" class="nav-link"><i
-                            class="fa-solid fa-capsules"></i> Data Obat</a>
-                    <a href="${pageContext.request.contextPath}/supplier" class="nav-link"><i
-                            class="fa-solid fa-truck-field"></i> Data Supplier</a>
-                    <a href="${pageContext.request.contextPath}/transaksi-masuk" class="nav-link active"><i
-                            class="fa-solid fa-circle-down"></i> Obat Masuk</a>
-                    <a href="${pageContext.request.contextPath}/transaksi-keluar" class="nav-link"><i
-                            class="fa-solid fa-circle-up"></i> Obat Keluar</a>
-                    <a href="${pageContext.request.contextPath}/laporan" class="nav-link"><i
-                            class="fa-solid fa-chart-line"></i> Laporan</a>
-                    <div class="mt-auto pt-4"><a href="${pageContext.request.contextPath}/logout"
-                            class="nav-link text-danger"><i class="fa-solid fa-right-from-bracket"></i> Keluar</a></div>
-                </div>
+                <jsp:include page="/WEB-INF/includes/sidebar.jsp">
+                    <jsp:param name="activePage" value="transaksi-masuk" />
+                </jsp:include>
 
                 <div class="flex-grow-1 p-4 content-area">
+                    <!-- Messages -->
+                    <jsp:include page="/WEB-INF/includes/messages.jsp" />
+
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <div>
                             <h3 class="text-white mb-0">Transaksi Obat Masuk</h3>
@@ -52,46 +31,51 @@
                     </div>
 
                     <div class="row g-3">
-                        <div class="col-lg-4" data-aos="fade-up">
-                            <div class="glass-card card">
-                                <div class="card-header bg-transparent text-white fw-semibold">Tambah Obat Masuk</div>
-                                <div class="card-body">
-                                    <form method="post" action="${pageContext.request.contextPath}/transaksi-masuk">
-                                        <div class="mb-2">
-                                            <label class="form-label">Obat</label>
-                                            <select name="idObat" class="form-select" required>
-                                                <c:forEach items="${obatList}" var="o">
-                                                    <option value="${o.id}">${o.namaObat} (${o.kodeObat})</option>
-                                                </c:forEach>
-                                            </select>
-                                        </div>
-                                        <div class="mb-2">
-                                            <label class="form-label">Tanggal Masuk</label>
-                                            <input type="date" name="tanggalMasuk" class="form-control" required>
-                                        </div>
-                                        <div class="mb-2">
-                                            <label class="form-label">Jumlah</label>
-                                            <input type="number" name="jumlah" class="form-control" required>
-                                        </div>
-                                        <div class="mb-2">
-                                            <label class="form-label">Nomor Batch</label>
-                                            <input type="text" name="nomorBatch" class="form-control">
-                                        </div>
-                                        <div class="mb-2">
-                                            <label class="form-label">Supplier</label>
-                                            <input type="text" name="supplier" class="form-control">
-                                        </div>
-                                        <div class="mb-2">
-                                            <label class="form-label">Keterangan</label>
-                                            <textarea name="keterangan" class="form-control" rows="2"></textarea>
-                                        </div>
-                                        <button class="btn btn-primary w-100 mt-2" type="submit">Simpan</button>
-                                    </form>
+                        <!-- Form Section - Only Admin & Apoteker can add -->
+                        <c:if test="${canManageObatMasuk}">
+                            <div class="col-lg-4" data-aos="fade-up">
+                                <div class="glass-card card">
+                                    <div class="card-header bg-transparent text-white fw-semibold">Tambah Obat Masuk
+                                    </div>
+                                    <div class="card-body">
+                                        <form method="post" action="${pageContext.request.contextPath}/transaksi-masuk">
+                                            <div class="mb-2">
+                                                <label class="form-label">Obat</label>
+                                                <select name="idObat" class="form-select" required>
+                                                    <c:forEach items="${obatList}" var="o">
+                                                        <option value="${o.id}">${o.namaObat} (${o.kodeObat})</option>
+                                                    </c:forEach>
+                                                </select>
+                                            </div>
+                                            <div class="mb-2">
+                                                <label class="form-label">Tanggal Masuk</label>
+                                                <input type="date" name="tanggalMasuk" class="form-control" required>
+                                            </div>
+                                            <div class="mb-2">
+                                                <label class="form-label">Jumlah</label>
+                                                <input type="number" name="jumlah" class="form-control" required>
+                                            </div>
+                                            <div class="mb-2">
+                                                <label class="form-label">Nomor Batch</label>
+                                                <input type="text" name="nomorBatch" class="form-control">
+                                            </div>
+                                            <div class="mb-2">
+                                                <label class="form-label">Supplier</label>
+                                                <input type="text" name="supplier" class="form-control">
+                                            </div>
+                                            <div class="mb-2">
+                                                <label class="form-label">Keterangan</label>
+                                                <textarea name="keterangan" class="form-control" rows="2"></textarea>
+                                            </div>
+                                            <button class="btn btn-primary w-100 mt-2" type="submit">Simpan</button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </c:if>
 
-                        <div class="col-lg-8" data-aos="fade-up" data-aos-delay="100">
+                        <div class="${canManageObatMasuk ? 'col-lg-8' : 'col-12'}" data-aos="fade-up"
+                            data-aos-delay="100">
                             <div class="glass-card card">
                                 <div class="card-header bg-transparent text-white fw-semibold">Riwayat Obat Masuk</div>
                                 <div class="card-body p-0">
@@ -111,7 +95,8 @@
                                                     <tr>
                                                         <td>${m.tanggalMasuk}</td>
                                                         <td>${m.namaObat}</td>
-                                                        <td>${m.jumlah} ${m.satuan}</td>
+                                                        <td><span class="badge bg-success">${m.jumlah}
+                                                                ${m.satuan}</span></td>
                                                         <td>${m.supplier}</td>
                                                         <td>${m.nomorBatch}</td>
                                                     </tr>

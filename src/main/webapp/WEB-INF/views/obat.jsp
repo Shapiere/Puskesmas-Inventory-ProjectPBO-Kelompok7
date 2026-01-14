@@ -15,121 +15,105 @@
 
         <body class="gradient-bg">
             <div class="d-flex min-vh-100">
-                <div class="sidebar shadow-lg" data-aos="fade-right">
-                    <div class="sidebar-brand mb-3"
-                        style="font-family: 'Roboto Slab', serif; font-size: 22px; letter-spacing: 0.5px; white-space: nowrap;">
-                        <i class="fa-solid fa-pills me-2"></i>Manajemen Obat
-                    </div>
-                    <a href="${pageContext.request.contextPath}/home" class="nav-link"><i class="fa-solid fa-house"></i>
-                        Home</a>
-                    <a href="${pageContext.request.contextPath}/about" class="nav-link"><i
-                            class="fa-solid fa-circle-info"></i> About Us</a>
-                    <a href="${pageContext.request.contextPath}/gallery" class="nav-link"><i
-                            class="fa-solid fa-images"></i> Gallery</a>
-                    <hr class="border-secondary my-3">
-                    <a href="${pageContext.request.contextPath}/dashboard" class="nav-link"><i
-                            class="fa-solid fa-gauge"></i> Dashboard</a>
-                    <a href="${pageContext.request.contextPath}/obat" class="nav-link active"><i
-                            class="fa-solid fa-capsules"></i> Data Obat</a>
-                    <a href="${pageContext.request.contextPath}/supplier" class="nav-link"><i
-                            class="fa-solid fa-truck-field"></i> Data Supplier</a>
-                    <a href="${pageContext.request.contextPath}/transaksi-masuk" class="nav-link"><i
-                            class="fa-solid fa-circle-down"></i> Obat Masuk</a>
-                    <a href="${pageContext.request.contextPath}/transaksi-keluar" class="nav-link"><i
-                            class="fa-solid fa-circle-up"></i> Obat Keluar</a>
-                    <a href="${pageContext.request.contextPath}/laporan" class="nav-link"><i
-                            class="fa-solid fa-chart-line"></i> Laporan</a>
-                    <div class="mt-auto pt-4">
-                        <a href="${pageContext.request.contextPath}/logout" class="nav-link text-danger"><i
-                                class="fa-solid fa-right-from-bracket"></i> Keluar</a>
-                    </div>
-                </div>
+                <jsp:include page="/WEB-INF/includes/sidebar.jsp">
+                    <jsp:param name="activePage" value="obat" />
+                </jsp:include>
 
                 <div class="flex-grow-1 p-4 content-area">
+                    <!-- Messages -->
+                    <jsp:include page="/WEB-INF/includes/messages.jsp" />
+
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <div>
                             <h3 class="text-white mb-0">Data Obat</h3>
                             <small class="text-white-50">Kelola data obat</small>
                         </div>
-                        <a href="${pageContext.request.contextPath}/obat" class="btn btn-outline-light btn-sm">Reset
-                            Form</a>
+                        <c:if test="${canManageObat}">
+                            <a href="${pageContext.request.contextPath}/obat" class="btn btn-outline-light btn-sm">Reset
+                                Form</a>
+                        </c:if>
                     </div>
 
                     <div class="row g-3">
-                        <div class="col-lg-4" data-aos="fade-up">
-                            <div class="glass-card card">
-                                <div class="card-header bg-transparent text-white fw-semibold">${editObat == null ?
-                                    "Tambah Obat" : "Ubah Obat"}</div>
-                                <div class="card-body">
-                                    <form method="post" action="${pageContext.request.contextPath}/obat">
-                                        <input type="hidden" name="action" value="${editObat == null ? " create"
-                                            : "update" }">
-                                        <c:if test="${editObat != null}">
-                                            <input type="hidden" name="id" value="${editObat.id}">
-                                        </c:if>
-                                        <div class="mb-2">
-                                            <label class="form-label">Kode</label>
-                                            <input type="text" name="kodeObat" class="form-control"
-                                                value="${editObat.kodeObat}" required>
-                                        </div>
-                                        <div class="mb-2">
-                                            <label class="form-label">Nama</label>
-                                            <input type="text" name="namaObat" class="form-control"
-                                                value="${editObat.namaObat}" required>
-                                        </div>
-                                        <div class="mb-2">
-                                            <label class="form-label">Kategori</label>
-                                            <input type="text" name="kategori" class="form-control"
-                                                value="${editObat.kategori}">
-                                        </div>
-                                        <div class="mb-2">
-                                            <label class="form-label">Satuan</label>
-                                            <input type="text" name="satuan" class="form-control"
-                                                value="${editObat.satuan}" required>
-                                        </div>
-                                        <div class="mb-2">
-                                            <label class="form-label">Harga Beli</label>
-                                            <input type="number" step="0.01" name="hargaBeli" class="form-control"
-                                                value="${editObat.hargaBeli}">
-                                        </div>
-                                        <div class="mb-2">
-                                            <label class="form-label">Stok Saat Ini</label>
-                                            <input type="number" name="stokSaatIni" class="form-control"
-                                                value="${editObat.stokSaatIni}" required>
-                                        </div>
-                                        <div class="mb-2">
-                                            <label class="form-label">Stok Minimum</label>
-                                            <input type="number" name="stokMinimum" class="form-control"
-                                                value="${editObat.stokMinimum}" required>
-                                        </div>
-                                        <div class="mb-2">
-                                            <label class="form-label">Kadaluarsa</label>
-                                            <input type="date" name="tanggalKadaluarsa" class="form-control"
-                                                value="${editObat.tanggalKadaluarsa}">
-                                        </div>
-                                        <div class="mb-2">
-                                            <label class="form-label">Lokasi</label>
-                                            <input type="text" name="lokasiPenyimpanan" class="form-control"
-                                                value="${editObat.lokasiPenyimpanan}">
-                                        </div>
-                                        <div class="mb-2">
-                                            <label class="form-label">Produsen</label>
-                                            <input type="text" name="produsen" class="form-control"
-                                                value="${editObat.produsen}">
-                                        </div>
-                                        <div class="mb-2">
-                                            <label class="form-label">Deskripsi</label>
-                                            <textarea name="deskripsi" class="form-control"
-                                                rows="2">${editObat.deskripsi}</textarea>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary w-100 mt-2">${editObat == null ?
-                                            "Simpan" : "Update"}</button>
-                                    </form>
+                        <!-- Form Section - Only visible for Admin & Apoteker -->
+                        <c:if test="${canManageObat}">
+                            <div class="col-lg-4" data-aos="fade-up">
+                                <div class="glass-card card">
+                                    <div class="card-header bg-transparent text-white fw-semibold">
+                                        ${editObat == null ? "Tambah Obat" : "Ubah Obat"}
+                                    </div>
+                                    <div class="card-body">
+                                        <form method="post" action="${pageContext.request.contextPath}/obat">
+                                            <input type="hidden" name="action"
+                                                value="${editObat == null ? 'create' : 'update'}">
+                                            <c:if test="${editObat != null}">
+                                                <input type="hidden" name="id" value="${editObat.id}">
+                                            </c:if>
+                                            <div class="mb-2">
+                                                <label class="form-label">Kode</label>
+                                                <input type="text" name="kodeObat" class="form-control"
+                                                    value="${editObat.kodeObat}" required>
+                                            </div>
+                                            <div class="mb-2">
+                                                <label class="form-label">Nama</label>
+                                                <input type="text" name="namaObat" class="form-control"
+                                                    value="${editObat.namaObat}" required>
+                                            </div>
+                                            <div class="mb-2">
+                                                <label class="form-label">Kategori</label>
+                                                <input type="text" name="kategori" class="form-control"
+                                                    value="${editObat.kategori}">
+                                            </div>
+                                            <div class="mb-2">
+                                                <label class="form-label">Satuan</label>
+                                                <input type="text" name="satuan" class="form-control"
+                                                    value="${editObat.satuan}" required>
+                                            </div>
+                                            <div class="mb-2">
+                                                <label class="form-label">Harga Beli</label>
+                                                <input type="number" step="0.01" name="hargaBeli" class="form-control"
+                                                    value="${editObat.hargaBeli}">
+                                            </div>
+                                            <div class="mb-2">
+                                                <label class="form-label">Stok Saat Ini</label>
+                                                <input type="number" name="stokSaatIni" class="form-control"
+                                                    value="${editObat.stokSaatIni}" required>
+                                            </div>
+                                            <div class="mb-2">
+                                                <label class="form-label">Stok Minimum</label>
+                                                <input type="number" name="stokMinimum" class="form-control"
+                                                    value="${editObat.stokMinimum}" required>
+                                            </div>
+                                            <div class="mb-2">
+                                                <label class="form-label">Kadaluarsa</label>
+                                                <input type="date" name="tanggalKadaluarsa" class="form-control"
+                                                    value="${editObat.tanggalKadaluarsa}">
+                                            </div>
+                                            <div class="mb-2">
+                                                <label class="form-label">Lokasi</label>
+                                                <input type="text" name="lokasiPenyimpanan" class="form-control"
+                                                    value="${editObat.lokasiPenyimpanan}">
+                                            </div>
+                                            <div class="mb-2">
+                                                <label class="form-label">Produsen</label>
+                                                <input type="text" name="produsen" class="form-control"
+                                                    value="${editObat.produsen}">
+                                            </div>
+                                            <div class="mb-2">
+                                                <label class="form-label">Deskripsi</label>
+                                                <textarea name="deskripsi" class="form-control"
+                                                    rows="2">${editObat.deskripsi}</textarea>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary w-100 mt-2">
+                                                ${editObat == null ? "Simpan" : "Update"}
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </c:if>
 
-                        <div class="col-lg-8" data-aos="fade-up" data-aos-delay="100">
+                        <div class="${canManageObat ? 'col-lg-8' : 'col-12'}" data-aos="fade-up" data-aos-delay="100">
                             <div class="glass-card card">
                                 <div class="card-header bg-transparent text-white fw-semibold">Daftar Obat</div>
                                 <div class="card-body p-0">
@@ -142,7 +126,9 @@
                                                     <th>Stok</th>
                                                     <th>Min</th>
                                                     <th>Satuan</th>
-                                                    <th>Aksi</th>
+                                                    <c:if test="${canManageObat}">
+                                                        <th>Aksi</th>
+                                                    </c:if>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -150,29 +136,46 @@
                                                     <tr>
                                                         <td>${o.kodeObat}</td>
                                                         <td>${o.namaObat}</td>
-                                                        <td>${o.stokSaatIni}</td>
+                                                        <td>
+                                                            <c:choose>
+                                                                <c:when test="${o.stokSaatIni <= o.stokMinimum}">
+                                                                    <span
+                                                                        class="badge bg-danger">${o.stokSaatIni}</span>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <span
+                                                                        class="badge bg-success">${o.stokSaatIni}</span>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </td>
                                                         <td>${o.stokMinimum}</td>
                                                         <td>${o.satuan}</td>
-                                                        <td>
-                                                            <a href="${pageContext.request.contextPath}/obat?id=${o.id}"
-                                                                class="btn btn-sm btn-outline-info"><i
-                                                                    class="fa-regular fa-pen-to-square"></i></a>
-                                                            <form method="post"
-                                                                action="${pageContext.request.contextPath}/obat"
-                                                                class="d-inline"
-                                                                onsubmit="return confirm('Hapus data?');">
-                                                                <input type="hidden" name="action" value="delete">
-                                                                <input type="hidden" name="id" value="${o.id}">
-                                                                <button class="btn btn-sm btn-outline-danger"><i
-                                                                        class="fa-regular fa-trash-can"></i></button>
-                                                            </form>
-                                                        </td>
+                                                        <c:if test="${canManageObat}">
+                                                            <td>
+                                                                <a href="${pageContext.request.contextPath}/obat?id=${o.id}"
+                                                                    class="btn btn-sm btn-outline-info">
+                                                                    <i class="fa-regular fa-pen-to-square"></i>
+                                                                </a>
+                                                                <form method="post"
+                                                                    action="${pageContext.request.contextPath}/obat"
+                                                                    class="d-inline"
+                                                                    onsubmit="return confirm('Hapus data?');">
+                                                                    <input type="hidden" name="action" value="delete">
+                                                                    <input type="hidden" name="id" value="${o.id}">
+                                                                    <button class="btn btn-sm btn-outline-danger">
+                                                                        <i class="fa-regular fa-trash-can"></i>
+                                                                    </button>
+                                                                </form>
+                                                            </td>
+                                                        </c:if>
                                                     </tr>
                                                 </c:forEach>
                                                 <c:if test="${empty obatList}">
                                                     <tr>
-                                                        <td colspan="6" class="text-center text-white-50 py-3">Belum ada
-                                                            data</td>
+                                                        <td colspan="${canManageObat ? '6' : '5'}"
+                                                            class="text-center text-white-50 py-3">
+                                                            Belum ada data
+                                                        </td>
                                                     </tr>
                                                 </c:if>
                                             </tbody>
